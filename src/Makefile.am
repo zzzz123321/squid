@@ -31,8 +31,30 @@ LOADABLE_MODULES_SOURCES = \
 	LoadableModules.cc \
 	LoadableModules.h
 
-SUBDIRS	= mem base anyp helper dns ftp parser comm eui acl format clients sbuf servers fs repl store DiskIO proxyp
-DIST_SUBDIRS = mem base anyp helper dns ftp parser comm eui acl format clients sbuf servers fs repl store DiskIO proxyp
+SRC_DIRS = \
+	mem \
+	base \
+	anyp \
+	helper \
+	dns \
+	ftp \
+	parser \
+	comm \
+	error \
+	eui \
+	acl \
+	format \
+	clients \
+	sbuf \
+	servers \
+	fs \
+	repl \
+	store \
+	DiskIO \
+	proxyp
+
+SUBDIRS = $(SRC_DIRS)
+DIST_SUBDIRS = $(SRC_DIRS)
 
 if ENABLE_AUTH
 SUBDIRS += auth
@@ -509,8 +531,6 @@ noinst_HEADERS = \
 BUILT_SOURCES = \
 	cf_gen_defines.cci \
 	cf_parser.cci \
-	err_detail_type.cc \
-	err_type.cc \
 	globals.cc \
 	hier_code.cc \
 	icp_opcode.cc \
@@ -543,6 +563,7 @@ squid_LDADD = \
 	DiskIO/libdiskio.la \
 	comm/libcomm.la \
 	anyp/libanyp.la \
+	error/liberror.la \
 	security/libsecurity.la \
 	$(SSL_LIBS) \
 	ipc/libipc.la \
@@ -730,12 +751,6 @@ globals.cc: globals.h mk-globals-c.awk
 ## Generate files containing string arrays for various enums....
 hier_code.cc: hier_code.h mk-string-arrays.awk
 	$(AWK) -f $(srcdir)/mk-string-arrays.awk < $(srcdir)/hier_code.h > $@ || ($(RM) -f $@ && exit 1)
-
-err_type.cc: err_type.h mk-string-arrays.awk
-	$(AWK) -f $(srcdir)/mk-string-arrays.awk < $(srcdir)/err_type.h > $@ || ($(RM) -f $@ && exit 1)
-
-err_detail_type.cc: err_detail_type.h mk-string-arrays.awk
-	$(AWK) -f $(srcdir)/mk-string-arrays.awk < $(srcdir)/err_detail_type.h | sed 's/ERR_DETAIL_//' > $@ || ($(RM) -f $@ && exit 1)
 
 lookup_t.cc: lookup_t.h mk-string-arrays.awk
 	$(AWK) -f $(srcdir)/mk-string-arrays.awk < $(srcdir)/lookup_t.h > $@ || ($(RM) -f $@ && exit 1)
@@ -1244,6 +1259,7 @@ tests_testRock_LDADD = \
 	acl/libapi.la \
 	acl/libstate.la \
 	anyp/libanyp.la \
+	error/liberror.la \
 	eui/libeui.la \
 	$(SSL_LIBS) \
 	ipc/libipc.la \
@@ -1424,6 +1440,7 @@ tests_testUfs_LDADD = \
 	DiskIO/libdiskio.la \
 	acl/libapi.la \
 	anyp/libanyp.la \
+	error/liberror.la \
 	$(SSL_LIBS) \
 	ipc/libipc.la \
 	comm/libcomm.la \
@@ -1596,6 +1613,7 @@ tests_testStore_LDADD= \
 	fs/libfs.la \
 	mgr/libmgr.la \
 	anyp/libanyp.la \
+	error/liberror.la \
 	mem/libmem.la \
 	store/libstore.la \
 	sbuf/libsbuf.la \
@@ -1774,6 +1792,7 @@ tests_testDiskIO_LDADD = \
 	DiskIO/libdiskio.la \
 	acl/libapi.la \
 	anyp/libanyp.la \
+	error/liberror.la \
 	mgr/libmgr.la \
 	$(SSL_LIBS) \
 	ipc/libipc.la \
@@ -2054,6 +2073,7 @@ tests_test_http_range_LDADD = \
 	ip/libip.la \
 	fs/libfs.la \
 	anyp/libanyp.la \
+	error/liberror.la \
 	icmp/libicmp.la \
 	comm/libcomm.la \
 	log/liblog.la \
@@ -2217,6 +2237,7 @@ tests_testHttpReply_LDADD=\
 	acl/libapi.la \
 	acl/libstate.la \
 	anyp/libanyp.la \
+	error/liberror.la \
 	ip/libip.la \
 	base/libbase.la \
 	ipc/libipc.la \
@@ -2448,6 +2469,7 @@ tests_testHttpRequest_LDADD = \
 	base/libbase.la \
 	mgr/libmgr.la \
 	anyp/libanyp.la \
+	error/liberror.la \
 	$(SNMP_LIBS) \
 	icmp/libicmp.la \
 	comm/libcomm.la \
@@ -2757,6 +2779,7 @@ tests_testCacheManager_LDADD = \
 	$(ESI_LIBS) \
 	$(SSL_LIBS) \
 	anyp/libanyp.la \
+	error/liberror.la \
 	ipc/libipc.la \
 	mgr/libmgr.la \
 	$(SNMP_LIBS) \
@@ -3071,6 +3094,7 @@ tests_testEvent_LDADD = \
 	ip/libip.la \
 	fs/libfs.la \
 	anyp/libanyp.la \
+	error/liberror.la \
 	icmp/libicmp.la \
 	comm/libcomm.la \
 	log/liblog.la \
